@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div class="text-center mt-[30px] border-2 border-solid border-pink-500  w-[350px] mx-auto rounded-3xl py-[10px]">
+         <form action="" method="post" class="flex flex-col  justify-center items-center">
+            <label for="userName">userName</label><br>
+            <input type="text" name="userName" placeholder="Enter your name" class="border-2 border-black border-solid rounded-lg py-[10px] px-[10px]"><br>
+            <label for="email">Email</label><br>
+            <input type="email" name="email" placeholder="Enter mail" class="border-2 border-black border-solid rounded-lg py-[10px] px-[10px]"><br>
+            <label for="phoneNumber">PhoneNumber</label><br>
+            <input type="tel" name="phoneNumber" placeholder="Enter phone number" class="border-2 border-black border-solid rounded-lg py-[10px] px-[10px]"><br>
+            <button type="submit" class="border-2 border-black border-solid rounded-lg bg-purple-500 text-black p-[5px]">Submit</button>
+         </form>   
+    </div>
+    <div id="details" class="mt-[30px] border-[2px] border-solid border-pink-900 rounded-lg max-w-[800px] mx-auto py-[20px]">
+        <ul class="flex flex-col justify-center items-center  gap-y-[5px] list-none">
+        </ul>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let form = document.querySelector("form");
+            form.addEventListener('submit', (event) => {
+                event.preventDefault();
+                let userName = event.target.userName.value;
+                let email = event.target.email.value;
+                let phoneNumber = event.target.phoneNumber.value;
+                let userDetails = {
+                    userName: userName,
+                    email: email,
+                    phoneNumber: phoneNumber
+                }
+                addtoDB(userDetails).then((res) => {
+                    userDetails.id = res.data.id;
+                    event.target.userName.value = "";
+                    event.target.email.value = "";
+                    event.target.phoneNumber.value = "";
+                    addtoList(userDetails);
+                })
+            });
+        });
+
+        function addtoList(userDetails) {
+            let li = document.createElement("li");
+            li.className="border-b-[2px] border-solid border-pink-900"
+            let form = document.createElement('form');
+            form.method = 'put';
+            form.classList.add("flex")
+            form.classList.add('gap-x-[3px]')
+            let id_input = document.createElement('input');
+            id_input.name = 'id';
+            id_input.type = 'text';
+            id_input.value = userDetails.id;
+            id_input.classList.add('hidden');
+            form.append(id_input);
+            let userName_input = document.createElement('input');
+            userName_input.readOnly=true;
+            userName_input.name = 'userName';
+            userName_input.type = 'text';
+            userName_input.value = userDetails.userName;
+            userName_input.classList.add('readonly')
+            form.append(userName_input);
+            let email_input = document.createElement('input');
+            email_input.readOnly=true;
+            email_input.name = 'email';
+            email_input.type = 'email';
+            email_input.value = userDetails.email;
+            email_input.classList.add('readonly')
+            form.append(email_input);
+
+            let phone_input = document.createElement('input');
+            phone_input.readOnly=true;
+            phone_input.name = 'phone';
+            phone_input.type = 'tel';
+            phone_input.value = userDetails.phoneNumber;
+            phone_input.classList.add('readonly')
+            form.append(phone_input);
+
+            let deleteButton = document.createElement("button");
+            deleteButton.innerText = "Delete";
+            deleteButton.type='button';
+            deleteButton.className="border-[2px] border-solid border-black bg-purple-500 text-black font-bold p-[5px] mx-[20px] rounded-lg"
+            form.append(deleteButton)
+
+            
+
+            let editButton = document.createElement("button");
+            editButton.innerText = "Edit";
+            editButton.className="border-[2px] border-solid border-black bg-purple-500 text-black font-bold p-[5px] mx-[20px] rounded-lg"
+            editButton.type='button';
+            form.append(editButton);
+
+            let cancelButton = document.createElement("button");
+            cancelButton.innerText = "Cancel";
+            cancelButton.className="border-[2px] border-solid border-black bg-purple-500 text-black font-bold p-[5px] mx-[20px] rounded-lg hidden"
+            cancelButton.type='button';
+            form.append(cancelButton);
+
+            let saveButton = document.createElement("button");
+            saveButton.innerText = "Save";
+            saveButton.className="border-[2px] border-solid border-black bg-purple-500 text-black font-bold p-[5px] mx-[20px] rounded-lg hidden"
+            saveButton.type='Submit';
+            form.append(saveButton);
+
+            li.append(form)
+            document.querySelector("#details").querySelector("ul").append(li);
+            
+            deleteButton.addEventListener('click',()=>{
+                deleteRecord(id_input.value).then((res)=>{
+                deleteButton.parentElement.parentElement.remove()
+                }).catch((error)=>{
+                    console.log(error)
+                })
+            })
+            editButton.addEventListener('click',()=>{
+                userName_input.readOnly=false;
+                phone_input.readOnly=false;
+                email_input.readOnly=false;
+                deleteButton.classList.add('hidden');
+                editButton.classList.add('hidden');
+                cancelButton.classList.remove('hidden');
+                saveButton.classList.remove('hidden');
+                saveButton.addEventListener('click',(event)=>{
+                    event.preventDefault()
+                    let userDetails={
+                        userName:userName_input.value,
+                        email:email_input.value,
+                        phoneNumber:phone_input.value
+                    }
+                    updateDetails(id_input.value,userDetails).then((res)=>{
+                        console.log(res)
+                        let data=res.data;
+                        userName_input=userDetails.userName;
+                        email_input=userDetails.email;
+                        phone_input=userDetails.phoneNumber;
+                        userName_input.readOnly=true;
+                        email_input.readOnly=true;
+                        phone_input.readOnly=true;
+                        deleteButton.classList.remove('hidden');
+                        editButton.classList.remove('hidden');
+                        cancelButton.classList.add('hidden');
+                        saveButton.classList.add('hidden');
+                    }).catch((error)=>{
+                        console.log(error)
+                    })
+                })
+                cancelButton.addEventListener('click',()=>{
+                    window.location.reload();
+                })
+
+            })
+        }
+        function updateDetails(id,userDetails){
+            return axios.put(`http://localhost:4000/User/update/${id}`,userDetails)
+        }
+
+        function addtoDB(userDetails) {
+            return axios.post("http://localhost:4000/User/create-Product", userDetails)
+        }
+        function deleteRecord(id){
+            return axios.delete(`http://localhost:4000/User/delete/${id}`)
+        }
+        function fetchAll(){
+            axios.get("http://localhost:4000/User/get-all-appointment").then((res)=>{
+                let data=res.data;
+                data.forEach((userDetails)=>{
+                    addtoList(userDetails);  
+                })
+            })
+        }
+        fetchAll()
+    </script>
+</body>
+</html>
