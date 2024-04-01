@@ -137,9 +137,9 @@
                     updateDetails(id_input.value,userDetails).then((res)=>{
                         console.log(res)
                         let data=res.data;
-                        userName_input=userDetails.userName;
-                        email_input=userDetails.email;
-                        phone_input=userDetails.phoneNumber;
+                        userName_input.value=userDetails.userName;
+                        email_input.value=userDetails.email;
+                        phone_input.value=userDetails.phoneNumber;
                         userName_input.readOnly=true;
                         email_input.readOnly=true;
                         phone_input.readOnly=true;

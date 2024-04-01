@@ -38,7 +38,7 @@ exports.update=(req,res)=>{
     }
   })
   .then(numUpdated =>{
-      res.json(numUpdated)
+      res.json(User.findByPk(req.params.id))
   })
   .catch(err => {
     console.error('Error updating record:', err);
