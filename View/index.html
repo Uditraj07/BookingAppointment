@@ -10,15 +10,15 @@
     <div class="text-center mt-[30px] border-2 border-solid border-pink-500  w-[350px] mx-auto rounded-3xl py-[10px]">
          <form action="" method="post" class="flex flex-col  justify-center items-center">
             <label for="userName">userName</label><br>
-            <input type="text" name="userName" placeholder="Enter your name" class="border-2 border-black border-solid rounded-lg py-[10px] px-[10px]"><br>
+            <input type="text" name="userName" placeholder="Enter your name" class="border-2 border-black border-solid rounded-lg py-[10px] px-[10px] w-full"><br>
             <label for="email">Email</label><br>
-            <input type="email" name="email" placeholder="Enter mail" class="border-2 border-black border-solid rounded-lg py-[10px] px-[10px]"><br>
+            <input type="email" name="email" placeholder="Enter mail" class="border-2 border-black border-solid rounded-lg py-[10px] px-[10px] w-full"><br>
             <label for="phoneNumber">PhoneNumber</label><br>
-            <input type="tel" name="phoneNumber" placeholder="Enter phone number" class="border-2 border-black border-solid rounded-lg py-[10px] px-[10px]"><br>
+            <input type="tel" name="phoneNumber" placeholder="Enter phone number" class="border-2 border-black border-solid rounded-lg py-[10px] px-[10px] w-full"><br>
             <button type="submit" class="border-2 border-black border-solid rounded-lg bg-purple-500 text-black p-[5px]">Submit</button>
          </form>   
     </div>
-    <div id="details" class="mt-[30px] border-[2px] border-solid border-pink-900 rounded-lg max-w-[800px] mx-auto py-[20px]">
+    <div id="details" class="mt-[30px] border-[2px] border-solid border-pink-900 rounded-lg max-w-[1250px] mx-auto py-[20px]">
         <ul class="flex flex-col justify-center items-center  gap-y-[5px] list-none">
         </ul>
     </div>
@@ -90,7 +90,6 @@
             form.append(deleteButton)
 
             
-
             let editButton = document.createElement("button");
             editButton.innerText = "Edit";
             editButton.className="border-[2px] border-solid border-black bg-purple-500 text-black font-bold p-[5px] mx-[20px] rounded-lg"
